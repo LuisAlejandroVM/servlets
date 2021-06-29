@@ -26,15 +26,15 @@ public class DaoUser {
                 BeanPerson person = new BeanPerson();
                 BeanUser user = new BeanUser();
 
-                role.setId(rs.getShort("id"));
-                role.setDescription(rs.getString("name"));
+                role.setId(rs.getInt("idRoles"));
+                role.setDescription(rs.getString("nameRole"));
 
-                person.setId(rs.getLong("id"));
-                person.setName(rs.getString("name"));
+                person.setId(rs.getLong("idPersons"));
+                person.setName(rs.getString("namePerson"));
                 person.setLastname(rs.getString("lastname"));
-                person.setEdad(rs.getShort("age"));
+                person.setEdad(rs.getInt("age"));
 
-                user.setId(rs.getLong("id"));
+                user.setId(rs.getLong("idUsers"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
 
@@ -46,14 +46,7 @@ public class DaoUser {
         }catch (SQLException e){
             System.out.println("Ha ocurrido un error: " + e.getMessage());
         } finally {
-            try{
-                if(con != null){
-                    con.close();
-                }
-                if(rs != null){
-                    rs.close();
-                }
-            }catch(SQLException e){ }
+            ConnectionMySQL.closeConnections(con, cstm, rs);
         }
         return listUsers;
     }
@@ -62,24 +55,60 @@ public class DaoUser {
         boolean flag = false;
         try{
             con = ConnectionMySQL.getConnection();
-            cstm = con.prepareCall("{call sp_insertUser(?,?,?,?,?)}");
+            cstm = con.prepareCall("{call sp_create(?,?,?,?,?,?)}");
             cstm.setString(1, user.getIdPerson().getName());
             cstm.setString(2, user.getIdPerson().getLastname());
-            // Terminar de poner los demás atributos
+            cstm.setInt(3, user.getIdPerson().getEdad());
+            cstm.setString(4, user.getEmail());
+            cstm.setString(5, user.getPassword());
+            cstm.setInt(6, user.getIdRole().getId());
 
             flag = cstm.execute();
         }catch(SQLException e){
             System.out.println("Error: " + e.getMessage());
         } finally {
-            try{
-                if(con != null){
-                    con.close();
-                }
-                if(cstm != null){
-                    cstm.close();
-                }
-            }catch(SQLException e){ }
+            ConnectionMySQL.closeConnections(con, cstm);
         }
         return flag;
+    }
+
+    public static void main(String[] args) {
+        BeanUser beanUser = new BeanUser();
+        BeanPerson beanPerson = new BeanPerson();
+        BeanRole beanRole = new BeanRole();
+        DaoUser daoUser = new DaoUser();
+        /*
+        // Listando usuarios
+        List<BeanUser> listUsers = new ArrayList<>();
+        listUsers = daoUser.findAll();
+
+        for (int i = 0; i < listUsers.size(); i++){
+            System.out.println(listUsers.get(i).getIdPerson().getName());
+        }
+        */
+
+        // Registrando usuarios
+        boolean registed = false;
+
+        beanRole.setId(1);
+
+        beanPerson.setName("Paty");
+        beanPerson.setLastname("Morales");
+        beanPerson.setEdad(29);
+
+        beanUser.setEmail("patymorales@utez.edu.mx");
+        beanUser.setPassword("admin1234");
+
+        beanUser.setIdPerson(beanPerson);
+        beanUser.setIdRole(beanRole);
+
+        registed = daoUser.create(beanUser);
+
+        if(registed){
+            System.out.println("Se ha registrado correctamente");
+        } else {
+            System.out.println("No se registró");
+        }
+
     }
 }

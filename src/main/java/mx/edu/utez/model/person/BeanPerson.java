@@ -4,12 +4,12 @@ public class BeanPerson {
     private long id;
     private String name;
     private String lastname;
-    private short edad;
+    private int edad;
 
     public BeanPerson() {
     }
 
-    public BeanPerson(long id, String name, String lastname, short edad) {
+    public BeanPerson(long id, String name, String lastname, int edad) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -40,11 +40,11 @@ public class BeanPerson {
         this.lastname = lastname;
     }
 
-    public short getEdad() {
+    public int getEdad() {
         return edad;
     }
 
-    public void setEdad(short edad) {
+    public void setEdad(int edad) {
         this.edad = edad;
     }
 }
