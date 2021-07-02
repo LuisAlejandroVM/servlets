@@ -26,15 +26,15 @@ public class DaoUser {
                 BeanPerson person = new BeanPerson();
                 BeanUser user = new BeanUser();
 
-                role.setId(rs.getInt("idRoles"));
+                role.setId(rs.getInt("idRole"));
                 role.setDescription(rs.getString("nameRole"));
 
-                person.setId(rs.getLong("idPersons"));
-                person.setName(rs.getString("namePerson"));
+                person.setId(rs.getLong("idPerson"));
+                person.setName(rs.getString("name"));
                 person.setLastname(rs.getString("lastname"));
                 person.setEdad(rs.getInt("age"));
 
-                user.setId(rs.getLong("idUsers"));
+                user.setId(rs.getLong("idUser"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
 
@@ -72,6 +72,28 @@ public class DaoUser {
         return flag;
     }
 
+    public boolean update(BeanUser user){
+        boolean flag = false;
+        try{
+            con = ConnectionMySQL.getConnection();
+            cstm = con.prepareCall("{call sp_update(?,?,?,?,?,?,?)}");
+            cstm.setString(1, user.getIdPerson().getName());
+            cstm.setString(2, user.getIdPerson().getLastname());
+            cstm.setInt(3, user.getIdPerson().getEdad());
+            cstm.setString(4, user.getEmail());
+            cstm.setString(5, user.getPassword());
+            cstm.setInt(6, user.getIdRole().getId());
+            cstm.setLong(7, user.getId());
+
+            flag = cstm.execute();
+        }catch(SQLException e){
+            System.out.println("Error: " + e.getMessage());
+        }finally{
+            ConnectionMySQL.closeConnections(con, cstm);
+        }
+        return flag;
+    }
+
     public static void main(String[] args) {
         BeanUser beanUser = new BeanUser();
         BeanPerson beanPerson = new BeanPerson();
@@ -83,10 +105,10 @@ public class DaoUser {
         listUsers = daoUser.findAll();
 
         for (int i = 0; i < listUsers.size(); i++){
-            System.out.println(listUsers.get(i).getIdPerson().getName());
+            System.out.println(listUsers.get(i).getIdPerson().getLastname());
         }
         */
-
+        /*
         // Registrando usuarios
         boolean registed = false;
 
@@ -104,11 +126,7 @@ public class DaoUser {
 
         registed = daoUser.create(beanUser);
 
-        if(registed){
-            System.out.println("Se ha registrado correctamente");
-        } else {
-            System.out.println("No se registró");
-        }
-
+        System.out.println("Se ha registrado correctamente");
+        */
     }
 }
