@@ -3,6 +3,8 @@ package mx.edu.utez.model.user;
 import mx.edu.utez.model.person.BeanPerson;
 import mx.edu.utez.model.role.BeanRole;
 import mx.edu.utez.service.ConnectionMySQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class DaoUser {
     Connection con;
     CallableStatement cstm;
     ResultSet rs;
+    Logger logger = LoggerFactory.getLogger(DaoUser.class);
 
     public List<BeanUser> findAll(){
         List<BeanUser> listUsers = new ArrayList<>();
@@ -37,6 +40,7 @@ public class DaoUser {
                 user.setId(rs.getLong("idUser"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
+                user.setStatus(rs.getInt("status"));
 
                 user.setIdPerson(person);
                 user.setIdRole(role);
@@ -44,7 +48,7 @@ public class DaoUser {
                 listUsers.add(user);
             }
         }catch (SQLException e){
-            System.out.println("Ha ocurrido un error: " + e.getMessage());
+            logger.error("Ha ocurrido un error: " + e.getMessage());
         } finally {
             ConnectionMySQL.closeConnections(con, cstm, rs);
         }
@@ -65,7 +69,7 @@ public class DaoUser {
 
             flag = cstm.execute();
         }catch(SQLException e){
-            System.out.println("Error: " + e.getMessage());
+            logger.error("Ha ocurrido un error: " + e.getMessage());
         } finally {
             ConnectionMySQL.closeConnections(con, cstm);
         }
@@ -87,27 +91,43 @@ public class DaoUser {
 
             flag = cstm.execute();
         }catch(SQLException e){
-            System.out.println("Error: " + e.getMessage());
+            logger.error("Ha ocurrido un error: " + e.getMessage());
         }finally{
             ConnectionMySQL.closeConnections(con, cstm);
         }
         return flag;
     }
 
+    public boolean delete(long idUser){
+        boolean flag = false;
+        try{
+            con = ConnectionMySQL.getConnection();
+            cstm = con.prepareCall("{call sp_delete2(?)}");
+            cstm.setLong(1, idUser);
+
+            flag = cstm.execute();
+        }catch(SQLException e){
+            logger.error("Ha ocurrido un error: " + e.getMessage());
+        }finally{
+            ConnectionMySQL.closeConnections(con, cstm);
+        }
+        return flag;
+    }
+/*
     public static void main(String[] args) {
         BeanUser beanUser = new BeanUser();
         BeanPerson beanPerson = new BeanPerson();
         BeanRole beanRole = new BeanRole();
         DaoUser daoUser = new DaoUser();
-        /*
+
         // Listando usuarios
         List<BeanUser> listUsers = new ArrayList<>();
         listUsers = daoUser.findAll();
 
         for (int i = 0; i < listUsers.size(); i++){
-            System.out.println(listUsers.get(i).getIdPerson().getLastname());
+            System.out.println(listUsers.get(i).getEmail());
         }
-        */
+
         /*
         // Registrando usuarios
         boolean registed = false;
@@ -128,5 +148,12 @@ public class DaoUser {
 
         System.out.println("Se ha registrado correctamente");
         */
-    }
+
+        // Eliminar de manera "baja lógica"
+        /*
+        boolean flag = false;
+        flag = daoUser.delete(4);
+        System.out.println("Se realizó correctamente");
+
+    }*/
 }

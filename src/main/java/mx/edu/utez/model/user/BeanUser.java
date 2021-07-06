@@ -7,16 +7,18 @@ public class BeanUser {
     private long id;
     private String email;
     private String password;
+    private int status;
     private BeanPerson idPerson;
     private BeanRole idRole;
 
     public BeanUser() {
     }
 
-    public BeanUser(long id, String email, String password, BeanPerson idPerson, BeanRole idRole) {
+    public BeanUser(long id, String email, String password, int status, BeanPerson idPerson, BeanRole idRole) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.status = status;
         this.idPerson = idPerson;
         this.idRole = idRole;
     }
@@ -43,6 +45,14 @@ public class BeanUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public BeanPerson getIdPerson() {
