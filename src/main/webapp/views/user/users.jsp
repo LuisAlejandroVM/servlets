@@ -43,7 +43,7 @@
                 </td>
                 <td>
                     <c:if test="${ user.status == 1 }">
-                        <form action="${context}/ServletUser" method="POST">
+                        <form action="${context}/ServletUser" method="POST" style="display: inline;">
                             <input type="hidden" name="action" value="getUserById">
                             <input type="hidden" name="id" value="${ user.id }">
                             <button type="submit" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Modificar</button>
