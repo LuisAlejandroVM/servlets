@@ -35,15 +35,19 @@
                 <td>${ user.email }</td>
                 <td>
                     <c:if test="${ user.status == 1 }">
-                        <span class="badge bg-success">Activo</span>
+                        <span class="badge rounded-pill bg-success">Activo</span>
                     </c:if>
                     <c:if test="${ user.status == 0 }">
-                        <span class="badge bg-danger">inactivo</span>
+                        <span class="badge rounded-pill bg-danger">Inactivo</span>
                     </c:if>
                 </td>
                 <td>
                     <c:if test="${ user.status == 1 }">
-                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Modificar</button>
+                        <form action="${context}/ServletUser" method="POST">
+                            <input type="hidden" name="action" value="getUserById">
+                            <input type="hidden" name="id" value="${ user.id }">
+                            <button type="submit" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Modificar</button>
+                        </form>
                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete"><i class="fas fa-trash"></i> Eliminar</button>
                     </c:if>
                     <c:if test="${ user.status == 0 }">

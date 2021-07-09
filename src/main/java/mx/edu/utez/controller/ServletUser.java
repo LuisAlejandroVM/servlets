@@ -26,28 +26,19 @@ public class ServletUser extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        String name = request.getParameter("name") != null ? request.getParameter("name") : "";
-        String lastname = request.getParameter("lastname");
-        String age = request.getParameter("age");
-
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role");
-
-        int edad = 0;
-        int rol = 0;
-        try{
-            edad = Integer.parseInt(age);
-            rol = Integer.parseInt(role);
-        }catch(Exception e){
-            logger.error("Ha ocurrido un error: " + e.getMessage());
-        }
-
         switch(action){
             case "create":
                 // do something
-                BeanRole beanRole = new BeanRole(rol, "");
-                BeanPerson beanPerson = new BeanPerson(0, name, lastname, edad);
+                String name = request.getParameter("name") != null ? request.getParameter("name") : "";
+                String lastname = request.getParameter("lastname");
+                int age = Integer.parseInt(request.getParameter("age"));
+
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+                int role = Integer.parseInt(request.getParameter("role"));
+
+                BeanRole beanRole = new BeanRole(role, "");
+                BeanPerson beanPerson = new BeanPerson(0, name, lastname, age);
                 BeanUser beanUser = new BeanUser(0, email, password, 0, beanPerson, beanRole);
 
                 if(new DaoUser().create(beanUser)){
@@ -58,8 +49,35 @@ public class ServletUser extends HttpServlet {
 
                 doGet(request, response);
                 break;
+
+            case "getUserById":
+                // do something
+                long id = Long.parseLong(request.getParameter("id"));
+                request.setAttribute("user", new DaoUser().findById(id));
+                request.getRequestDispatcher("/views/user/update.jsp").forward(request, response);
+                break;
             case "update":
                 // do something
+                String name1 = request.getParameter("name") != null ? request.getParameter("name") : "";
+                String lastname1 = request.getParameter("lastname");
+                int age1 = Integer.parseInt(request.getParameter("age"));
+
+                long id1 = Long.parseLong(request.getParameter("id"));
+                String email1 = request.getParameter("email");
+                String password1 = request.getParameter("password");
+                int role1 = Integer.parseInt(request.getParameter("role"));
+
+                BeanRole beanRole1 = new BeanRole(role1, "");
+                BeanPerson beanPerson1 = new BeanPerson(0, name1, lastname1, age1);
+                BeanUser beanUser1 = new BeanUser(id1, email1, password1, 0, beanPerson1, beanRole1);
+
+                if(new DaoUser().update(beanUser1)){
+                    request.setAttribute("message", "Usuario modificado correctamente");
+                } else {
+                    request.setAttribute("message", "Usuario no modificado");
+                }
+
+                doGet(request, response);
                 break;
             case "delete":
                 // do something

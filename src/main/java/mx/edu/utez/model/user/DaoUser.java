@@ -55,6 +55,44 @@ public class DaoUser {
         return listUsers;
     }
 
+    public BeanUser findById(long id){
+        BeanUser user = null;
+        try {
+            // SELECT * FROM users AS U INNER JOIN persons AS P ON U.idPerson = P.id INNER JOIN roles AS R ON U.idRole = R.id;
+            con = ConnectionMySQL.getConnection();
+            cstm = con.prepareCall("SELECT * FROM user AS U INNER JOIN person AS P ON U.idPersons = P.idPerson INNER JOIN roles AS R ON U.idRoles = R.idRole WHERE U.idUser = ?");
+            cstm.setLong(1, id);
+            rs = cstm.executeQuery();
+
+            if(rs.next()){
+                BeanRole role = new BeanRole();
+                BeanPerson person = new BeanPerson();
+                user = new BeanUser();
+
+                role.setId(rs.getInt("idRole"));
+                role.setDescription(rs.getString("nameRole"));
+
+                person.setId(rs.getLong("idPerson"));
+                person.setName(rs.getString("name"));
+                person.setLastname(rs.getString("lastname"));
+                person.setEdad(rs.getInt("age"));
+
+                user.setId(rs.getLong("idUser"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setStatus(rs.getInt("status"));
+
+                user.setIdPerson(person);
+                user.setIdRole(role);
+            }
+        }catch (SQLException e){
+            logger.error("Ha ocurrido un error: " + e.getMessage());
+        } finally {
+            ConnectionMySQL.closeConnections(con, cstm, rs);
+        }
+        return user;
+    }
+
     public boolean create(BeanUser user){
         boolean flag = false;
         try{
