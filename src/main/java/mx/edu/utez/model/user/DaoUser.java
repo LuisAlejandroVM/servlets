@@ -66,8 +66,8 @@ public class DaoUser {
             cstm.setString(4, user.getEmail());
             cstm.setString(5, user.getPassword());
             cstm.setInt(6, user.getIdRole().getId());
-
-            flag = cstm.execute();
+            cstm.execute();
+            flag = true;
         }catch(SQLException e){
             logger.error("Ha ocurrido un error: " + e.getMessage());
         } finally {
