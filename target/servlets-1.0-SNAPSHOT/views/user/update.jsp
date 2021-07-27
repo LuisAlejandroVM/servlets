@@ -16,7 +16,7 @@
 </head>
 <body>
 <h1>Modificar Usuario</h1>
-<form action="${context}/ServletUser" method="POST">
+<form action="${context}/updateUser" method="POST">
   <input type="hidden" value="update" name="action">
   <input type="hidden" value="${ user.id }" name="id">
   <label>Nombre(s):</label>

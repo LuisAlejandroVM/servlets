@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "ServletUser", urlPatterns = {"/readUsers", "/create", "/getUserById", "/update", "/delete"})
+@WebServlet(name = "ServletUser", urlPatterns = {"/readUsers", "/createUser", "/getUserById", "/updateUser", "/deleteUser"})
 public class ServletUser extends HttpServlet {
     Logger logger = LoggerFactory.getLogger(ServletUser.class);
 

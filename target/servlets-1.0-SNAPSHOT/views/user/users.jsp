@@ -43,15 +43,15 @@
                 </td>
                 <td>
                     <c:if test="${ user.status == 1 }">
-                        <form action="${context}/ServletUser" method="POST" style="display: inline;">
+                        <form action="${context}/getUserById" method="POST" style="display: inline;">
                             <input type="hidden" name="action" value="getUserById">
                             <input type="hidden" name="id" value="${ user.id }">
                             <button type="submit" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Modificar</button>
                         </form>
-                        <button id="btn-delete" data-code="${ user.id }" data-text="${ user.idPerson.name }" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete"><i class="fas fa-trash"></i> Eliminar</button>
+                        <button id="btn-delete-${ status.count }" data-code="${ user.id }" data-text="${ user.idPerson.name } ${ user.idPerson.lastname }" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete"><i class="fas fa-trash"></i> Eliminar</button>
                     </c:if>
                     <c:if test="${ user.status == 0 }">
-                        <button type="button" class="btn btn-outline-info"><i class="fas fa-info-circle"></i> Detalles</button>
+                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#details"><i class="fas fa-info-circle"></i> Detalles</button>
                     </c:if>
                 </td>
             </tr>
@@ -63,7 +63,7 @@
     <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="${context}/ServletUser" method="POST">
+                <form action="${context}/deleteUser" method="POST">
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="id" id="id">
                     <div class="modal-header">
@@ -79,6 +79,34 @@
                         <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Eliminar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="details" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Detalles del usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Nombre(s):</h5>
+                    <label>Luis</label>
+                    <br>
+                    <h5>Apellido(s):</h5>
+                    <label>Vázquez</label>
+                    <br>
+                    <h5>Correo:</h5>
+                    <label>luisvazquez@utez.edu.mx</label>
+                    <br>
+                    <h5>Contraseña:</h5>
+                    <label>1234</label>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+                </div>
             </div>
         </div>
     </div>

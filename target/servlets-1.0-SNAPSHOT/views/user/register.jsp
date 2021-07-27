@@ -16,7 +16,7 @@
 </head>
 <body>
     <h1>Registrar Usuario</h1>
-    <form action="${context}/ServletUser" method="POST">
+    <form action="${context}/createUser" method="POST">
         <input type="hidden" value="create" name="action">
         <label>Nombre(s):</label>
         <input class="form-control" type="text" name="name" />
