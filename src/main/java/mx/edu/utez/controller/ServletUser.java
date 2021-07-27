@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "ServletUser", value = "/ServletUser")
+@WebServlet(name = "ServletUser", urlPatterns = {"/readUsers", "/create", "/getUserById", "/update", "/delete"})
 public class ServletUser extends HttpServlet {
     Logger logger = LoggerFactory.getLogger(ServletUser.class);
 
@@ -82,6 +82,13 @@ public class ServletUser extends HttpServlet {
                 break;
             case "delete":
                 // do something
+                long id2 = Long.parseLong(request.getParameter("id"));
+                if(new DaoUser().delete(id2)){
+                    request.setAttribute("message", "Usuario eliminado correctamente");
+                } else {
+                    request.setAttribute("message", "Usuario no eliminado");
+                }
+                doGet(request, response);
                 break;
             default:
                 // no supported

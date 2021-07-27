@@ -48,7 +48,7 @@
                             <input type="hidden" name="id" value="${ user.id }">
                             <button type="submit" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Modificar</button>
                         </form>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete"><i class="fas fa-trash"></i> Eliminar</button>
+                        <button id="btn-delete" data-code="${ user.id }" data-text="${ user.idPerson.name }" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete"><i class="fas fa-trash"></i> Eliminar</button>
                     </c:if>
                     <c:if test="${ user.status == 0 }">
                         <button type="button" class="btn btn-outline-info"><i class="fas fa-info-circle"></i> Detalles</button>
@@ -63,17 +63,22 @@
     <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Eliminar usuario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
-                    <button type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Eliminar</button>
-                </div>
+                <form action="${context}/ServletUser" method="POST">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="id" id="id">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Eliminar usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label>¿Deshabilitar?</label>
+                        <h5 id="text-delete"></h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Eliminar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
