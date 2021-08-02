@@ -1,5 +1,6 @@
 package mx.edu.utez.controller;
 
+import com.google.gson.Gson;
 import mx.edu.utez.model.person.BeanPerson;
 import mx.edu.utez.model.role.BeanRole;
 import mx.edu.utez.model.user.BeanUser;
@@ -11,10 +12,13 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-@WebServlet(name = "ServletUser", urlPatterns = {"/readUsers", "/createUser", "/getUserById", "/updateUser", "/deleteUser"})
+@WebServlet(name = "ServletUser", urlPatterns = {"/readUsers", "/createUser", "/getUserById", "/findById", "/updateUser", "/deleteUser"})
 public class ServletUser extends HttpServlet {
     Logger logger = LoggerFactory.getLogger(ServletUser.class);
+    BeanUser beanUser = new BeanUser();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,6 +28,7 @@ public class ServletUser extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Map map = new HashMap();
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
@@ -56,6 +61,21 @@ public class ServletUser extends HttpServlet {
                 long id = Long.parseLong(request.getParameter("id"));
                 request.setAttribute("user", new DaoUser().findById(id));
                 request.getRequestDispatcher("/views/user/update.jsp").forward(request, response);
+                break;
+            case "findById":
+                // do something
+                try {
+                    Gson gson = new Gson();
+                    long id5 = Long.parseLong(request.getParameter("id"));
+
+                    map.put("user", new DaoUser().findById(id5));
+
+                    response.setStatus(200);
+                }catch(Exception e){
+                    response.setStatus(400);
+                    logger.error("Usuario no encontrado.");
+                }
+                write(response, map);
                 break;
             case "update":
                 // do something
@@ -95,4 +115,11 @@ public class ServletUser extends HttpServlet {
                 break;
         }
     }
+
+    private void write(HttpServletResponse response, Map<String, Object> map) throws IOException{
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new Gson().toJson(map));
+    }
 }
+

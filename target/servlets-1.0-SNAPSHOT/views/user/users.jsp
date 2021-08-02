@@ -51,7 +51,7 @@
                         <button id="btn-delete-${ status.count }" data-code="${ user.id }" data-text="${ user.idPerson.name } ${ user.idPerson.lastname }" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete"><i class="fas fa-trash"></i> Eliminar</button>
                     </c:if>
                     <c:if test="${ user.status == 0 }">
-                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#details"><i class="fas fa-info-circle"></i> Detalles</button>
+                        <button id="btn-details-${ status.count }" data-code="${ user.id }" type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#details"><i class="fas fa-info-circle"></i> Detalles</button>
                     </c:if>
                 </td>
             </tr>
@@ -92,16 +92,16 @@
                 </div>
                 <div class="modal-body">
                     <h5>Nombre(s):</h5>
-                    <label>Luis</label>
+                    <label id="lbl_name"></label>
                     <br>
                     <h5>Apellido(s):</h5>
-                    <label>Vázquez</label>
+                    <label id="lbl_lastname"></label>
                     <br>
                     <h5>Correo:</h5>
-                    <label>luisvazquez@utez.edu.mx</label>
+                    <label id="lbl_email"></label>
                     <br>
                     <h5>Contraseña:</h5>
-                    <label>1234</label>
+                    <label id="lbl_password"></label>
 
                 </div>
                 <div class="modal-footer">
